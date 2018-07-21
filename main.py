@@ -5,7 +5,7 @@ import heapq
 
 def draw_tile(graph, id, style):
     r = "."
-    #if 'number' in style and id in style['number']: r = "%d" % style['number'][id]
+    if 'number' in style and id in style['number']: r = "%d" % style['number'][id]
     if 'path' in style and id in style['path']: r = "*"
     if 'start' in style and id == style['start']: r = "O"
     if 'goal' in style and id == style['goal']: r = "X"
@@ -96,6 +96,8 @@ def construct_path(came_from, start, goal):
 
 init_graph = [] #Входной массив
 mass_walls = [] #Массив с координатами стен
+goal = ""
+start = ""
 print("Введите разметку поля. Каждую новую строку следует записывать на новой строке. Символы необходимо разделять пробелом. # - стена. X - точка назначения. O(буква) - точка старта.")
 print('''Например:\n
 . . . . X \n
@@ -104,6 +106,8 @@ print('''Например:\n
 . . . # . \n
 . O . . . \n
         ''')
+print("Введите разметку:")
+
 
 for _ in range(5):
     init_graph.append(input().rstrip().lstrip())
@@ -123,16 +127,26 @@ for i in range(5):
             if new_mass[j] == "#":
                 mass_walls.append((j, i))
 
+if goal == "" or start == "":
+    print("Разметка введена неправильно. Выход из программы ...")
+    exit()
+
 g = SquareGrid() #Создание графа
 g.walls = mass_walls
 
 #Манхэттенское рассояние
 came_from, cost_so_far = search_path_heuristic_manh(g, start, goal)
 print("Количество исследованных вершин по эвристике 'Манхэттенское расстоляние' - {0}(включая начальную и конечную)".format(len(cost_so_far)))
-draw_grid(g, path = construct_path(came_from, start, goal), start = start, goal= goal) #Вывод графа
-
+try:
+    draw_grid(g, path = construct_path(came_from, start, goal), start = start, goal= goal) #Вывод графа
+except KeyError:
+    print("Маршрут не найден")
+print()
 
 #Расстояние Чебышева
 came_from, cost_so_far = search_path_heuristic_cheb(g, start, goal)
 print("Количество исследованных вершин по эвристике 'Расстояние Чебышева' - {0}(включая начальную и конечную)".format(len(cost_so_far)))
-draw_grid(g, path = construct_path(came_from, start, goal), start = start, goal= goal) #Вывод графа
+try:
+    draw_grid(g, path = construct_path(came_from, start, goal), start = start, goal= goal) #Вывод графа
+except KeyError:
+    print("Маршрут не найден")
