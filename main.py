@@ -19,7 +19,7 @@ def draw_grid(graph, **style):
             print("%%-%ds" % 2 % draw_tile(graph, (x, y), style), end="")
         print()
 
-#Манхэттенское рассояние
+#Манхэттенское расстояние
 def heuristic_manh(a, b):
     (x1, y1) = a
     (x2, y2) = b
@@ -42,7 +42,7 @@ def search_path_heuristic_manh(graph, start, goal):
     cost_so_far[start] = 0
 
     while not frointer.empty():
-        current = frointer.get() #Берется первый элемент в куче - он же наименьший
+        current = frointer.get() #Берется первый элемент в куче
 
         if current == goal:
             break
@@ -68,7 +68,7 @@ def search_path_heuristic_cheb(graph, start, goal):
     cost_so_far[start] = 0
 
     while not frointer.empty():
-        current = frointer.get() #Берется первый элемент в куче - он же наименьший
+        current = frointer.get() #Берется первый элемент в куче
 
         if current == goal:
             break
@@ -136,7 +136,7 @@ g.walls = mass_walls
 
 #Манхэттенское рассояние
 came_from, cost_so_far = search_path_heuristic_manh(g, start, goal)
-print("Количество исследованных вершин по эвристике 'Манхэттенское расстоляние' - {0}(включая начальную и конечную)".format(len(cost_so_far)))
+print("Количество исследованных вершин по эвристике 'Манхэттенское расстояние' - {0}(включая начальную и конечную)".format(len(cost_so_far)))
 try:
     draw_grid(g, path = construct_path(came_from, start, goal), start = start, goal= goal) #Вывод графа
 except KeyError:
